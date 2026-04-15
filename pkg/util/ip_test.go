@@ -37,6 +37,18 @@ func TestIPsFromPrefixInvalid(t *testing.T) {
 	}
 }
 
+// TestIPsFromPrefixSingleHost verifies that a /32 prefix yields exactly one address.
+func TestIPsFromPrefixSingleHost(t *testing.T) {
+	prefix := netip.MustParsePrefix("192.168.1.5/32")
+	addrs, err := util.IPsFromPrefix(prefix)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(addrs) != 1 {
+		t.Errorf("expected 1 address for /32, got %d", len(addrs))
+	}
+}
+
 func TestIsIPv4(t *testing.T) {
 	addr := netip.MustParseAddr("10.0.0.1")
 	if !util.IsIPv4(addr) {
