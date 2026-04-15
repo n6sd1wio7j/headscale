@@ -18,6 +18,8 @@ func TestOverlapsPrefix(t *testing.T) {
 		{"non-overlapping", "10.0.0.0/8", "192.168.0.0/16", false},
 		{"ipv6 overlap", "fd7a::/16", "fd7a:115c::/32", true},
 		{"ipv6 no overlap", "fd7a::/16", "fd00::/16", false},
+		// Edge case: adjacent but non-overlapping subnets
+		{"adjacent subnets", "10.0.0.0/25", "10.0.0.128/25", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -82,6 +84,8 @@ func TestContainsPrefix(t *testing.T) {
 		{"equal", "10.0.0.0/8", "10.0.0.0/8", true},
 		{"not contains", "10.1.0.0/16", "10.0.0.0/8", false},
 		{"disjoint", "10.0.0.0/8", "192.168.0.0/16", false},
+		// Verify that a /32 host route is contained within its parent network
+		{"host route contained", "10.0.0.0/24", "10.0.0.1/32", true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
