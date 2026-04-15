@@ -47,6 +47,10 @@ func TestIPsFromPrefixSingleHost(t *testing.T) {
 	if len(addrs) != 1 {
 		t.Errorf("expected 1 address for /32, got %d", len(addrs))
 	}
+	// The single address should match the host address in the prefix.
+	if addrs[0] != prefix.Addr() {
+		t.Errorf("expected address %s, got %s", prefix.Addr(), addrs[0])
+	}
 }
 
 func TestIsIPv4(t *testing.T) {
