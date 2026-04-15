@@ -53,6 +53,20 @@ func TestIPsFromPrefixSingleHost(t *testing.T) {
 	}
 }
 
+// TestIPsFromPrefixIPv6 verifies that IPsFromPrefix works correctly for IPv6 prefixes.
+func TestIPsFromPrefixIPv6(t *testing.T) {
+	// /126 is the IPv6 equivalent of /30: 4 addresses total
+	prefix := netip.MustParsePrefix("fd7a:115c::/126")
+	addrs, err := util.IPsFromPrefix(prefix)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	// we skip the network address, so expect 3
+	if len(addrs) != 3 {
+		t.Errorf("expected 3 addresses for /126, got %d", len(addrs))
+	}
+}
+
 func TestIsIPv4(t *testing.T) {
 	addr := netip.MustParseAddr("10.0.0.1")
 	if !util.IsIPv4(addr) {
