@@ -11,10 +11,14 @@ func NormalizePrefix(prefix netip.Prefix) netip.Prefix {
 }
 
 // IPsFromPrefix returns all usable host addresses in a given prefix.
+// Note: for IPv4, this excludes the network address and broadcast address.
+// For IPv6, there is no broadcast address, so only the network address is excluded.
 func IPsFromPrefix(prefix netip.Prefix) ([]netip.Addr, error) {
 	if !prefix.IsValid() {
 		return nil, fmt.Errorf("invalid prefix: %s", prefix)
 	}
+
+	networkAddr := prefix.Masked().Addr()
 
 	var addrs []netip.Addr
 	addr := prefix.Addr()
@@ -22,7 +26,7 @@ func IPsFromPrefix(prefix netip.Prefix) ([]netip.Addr, error) {
 		if !prefix.Contains(addr) {
 			break
 		}
-		if addr != prefix.Masked().Addr() {
+		if addr != networkAddr {
 			addrs = append(addrs, addr)
 		}
 		addr = addr.Next()
