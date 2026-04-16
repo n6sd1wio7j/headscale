@@ -73,6 +73,7 @@ func AddrsToStrings(addrs []netip.Addr) []string {
 
 // ParseAddrPort parses a host:port string into a netip.AddrPort.
 // The host portion must be a valid IP address (not a hostname).
+// Note: raw IPv6 addresses (e.g. "::1:8080") must be bracketed like "[::1]:8080".
 func ParseAddrPort(s string) (netip.AddrPort, error) {
 	// Handle bare IPv6 addresses without brackets by checking if it looks
 	// like a raw IPv6 addr with no port.
