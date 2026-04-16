@@ -23,6 +23,7 @@ func PrefixesOverlap(prefixes []netip.Prefix) bool {
 }
 
 // ParsePrefixes parses a slice of CIDR strings into netip.Prefix values.
+// Note: each prefix is normalized (host bits are masked off) before being returned.
 func ParsePrefixes(cidrs []string) ([]netip.Prefix, error) {
 	prefixes := make([]netip.Prefix, 0, len(cidrs))
 	for _, cidr := range cidrs {
@@ -36,6 +37,7 @@ func ParsePrefixes(cidrs []string) ([]netip.Prefix, error) {
 }
 
 // ContainsPrefix returns true if outer fully contains inner.
+// Both prefixes should be normalized before calling this.
 func ContainsPrefix(outer, inner netip.Prefix) bool {
 	if outer.Bits() > inner.Bits() {
 		return false
@@ -43,7 +45,7 @@ func ContainsPrefix(outer, inner netip.Prefix) bool {
 	return outer.Contains(inner.Addr()) && outer.Contains(lastAddr(inner))
 }
 
-// lastAddr returns the last address in a prefix.
+// lastAddr returns the last address in a prefix by setting all host bits to 1.
 func lastAddr(p netip.Prefix) netip.Addr {
 	addr := p.Addr()
 	bits := addr.BitLen()
