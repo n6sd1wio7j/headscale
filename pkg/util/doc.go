@@ -10,6 +10,9 @@
 //   - Distinguishing between IPv4 and IPv6 addresses
 //   - Checking whether a prefix contains a given address
 //
+// Note: IPsFromPrefix can be expensive for large prefixes (e.g. /8 or larger).
+// Avoid calling it in hot paths or on wide address ranges.
+//
 // Example usage:
 //
 //	prefix := netip.MustParsePrefix("10.0.0.0/24")
