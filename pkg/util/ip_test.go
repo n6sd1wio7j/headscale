@@ -23,7 +23,7 @@ func TestIPsFromPrefix(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	// /30 has 4 addresses: network, 2 hosts, broadcast
-	// we skip the network address, so expect 3
+	// IPsFromPrefix skips the network address (first), so we expect 3
 	if len(addrs) != 3 {
 		t.Errorf("expected 3 addresses, got %d", len(addrs))
 	}
@@ -61,9 +61,24 @@ func TestIPsFromPrefixIPv6(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	// we skip the network address, so expect 3
+	// IPsFromPrefix skips the network address, so expect 3
 	if len(addrs) != 3 {
 		t.Errorf("expected 3 addresses for /126, got %d", len(addrs))
+	}
+}
+
+// TestIPsFromPrefixIPv6SingleHost verifies that a /128 prefix yields exactly one address.
+func TestIPsFromPrefixIPv6SingleHost(t *testing.T) {
+	prefix := netip.MustParsePrefix("fd7a:115c::1/128")
+	addrs, err := util.IPsFromPrefix(prefix)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(addrs) != 1 {
+		t.Errorf("expected 1 address for /128, got %d", len(addrs))
+	}
+	if addrs[0] != prefix.Addr() {
+		t.Errorf("expected address %s, got %s", prefix.Addr(), addrs[0])
 	}
 }
 
