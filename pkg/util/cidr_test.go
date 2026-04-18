@@ -22,6 +22,8 @@ func TestOverlapsPrefix(t *testing.T) {
 		{"adjacent subnets", "10.0.0.0/25", "10.0.0.128/25", false},
 		// Edge case: /0 (default route) overlaps everything
 		{"default route overlaps all", "0.0.0.0/0", "192.168.1.0/24", true},
+		// Edge case: /0 IPv6 default route overlaps everything
+		{"ipv6 default route overlaps all", "::/0", "fd7a:115c::/32", true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
