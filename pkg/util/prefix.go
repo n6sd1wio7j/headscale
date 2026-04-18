@@ -31,6 +31,7 @@ func PrefixBroadcastAddr(prefix netip.Prefix) netip.Addr {
 // PrefixSize returns the number of addresses in the prefix.
 // For large prefixes (e.g. /0 IPv6) this may overflow uint64 and returns
 // MaxUint64 as a sentinel value instead.
+// Note: bits==64 is also treated as overflow since 1<<64 is undefined in Go.
 func PrefixSize(prefix netip.Prefix) uint64 {
 	bits := prefix.Addr().BitLen() - prefix.Bits()
 	if bits >= 64 {
