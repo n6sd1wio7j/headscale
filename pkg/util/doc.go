@@ -12,7 +12,8 @@
 //
 // Note: IPsFromPrefix can be expensive for large prefixes (e.g. /8 or larger).
 // Avoid calling it in hot paths or on wide address ranges.
-// As a rule of thumb, prefer prefixes of /16 or smaller when possible.
+// As a rule of thumb, prefer prefixes of /24 or smaller when possible.
+// For IPv6, be especially cautious — even a /64 contains 2^64 addresses.
 //
 // Example usage:
 //
