@@ -13,4 +13,8 @@
 // These helpers are intended for use during configuration validation and
 // address-allocation logic where overlapping or misconfigured ranges must
 // be detected early.
+//
+// Note: ParsePrefixes silently drops invalid CIDR strings; callers should
+// check that the returned slice length matches the input if strict
+// validation is required.
 package util
