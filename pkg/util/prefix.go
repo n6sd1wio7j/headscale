@@ -29,7 +29,8 @@ func PrefixBroadcastAddr(prefix netip.Prefix) netip.Addr {
 }
 
 // PrefixSize returns the number of addresses in the prefix.
-// For large prefixes (e.g. /0 IPv6) this may overflow uint64.
+// For large prefixes (e.g. /0 IPv6) this may overflow uint64 and returns
+// MaxUint64 as a sentinel value instead.
 func PrefixSize(prefix netip.Prefix) uint64 {
 	bits := prefix.Addr().BitLen() - prefix.Bits()
 	if bits >= 64 {
@@ -79,6 +80,8 @@ func UniquePrefixes(prefixes []netip.Prefix) []netip.Prefix {
 
 // PrefixFromAddrAndBits constructs a prefix from an addr and bit length,
 // returning an error if the combination is invalid.
+// Note: addr.Prefix() already masks host bits, so the returned prefix may
+// differ from the input addr if host bits are set.
 func PrefixFromAddrAndBits(addr netip.Addr, bits int) (netip.Prefix, error) {
 	p, err := addr.Prefix(bits)
 	if err != nil {
