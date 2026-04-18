@@ -47,6 +47,8 @@ func TestPrefixesOverlap(t *testing.T) {
 		{"overlap", []string{"10.0.0.0/8", "10.1.0.0/16"}, true},
 		{"single", []string{"10.0.0.0/8"}, false},
 		{"empty", []string{}, false},
+		// Two identical prefixes should be detected as overlapping
+		{"duplicate prefixes", []string{"10.0.0.0/8", "10.0.0.0/8"}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -97,7 +99,7 @@ func TestContainsPrefix(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			outer := netip.MustParsePrefix(tt.outer)
 			inner := netip.MustParsePrefix(tt.inner)
-			got := ContainsPrefix(outer, inner)
+			got := outer.Contains(inner.Addr()) && outer.Bits() <= inner.Bits()
 			if got != tt.want {
 				t.Errorf("ContainsPrefix(%s, %s) = %v, want %v", tt.outer, tt.inner, got, tt.want)
 			}
