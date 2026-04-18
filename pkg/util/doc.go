@@ -14,6 +14,7 @@
 // Avoid calling it in hot paths or on wide address ranges.
 // As a rule of thumb, prefer prefixes of /24 or smaller when possible.
 // For IPv6, be especially cautious — even a /64 contains 2^64 addresses.
+// In practice, /112 or smaller is a safer upper bound for IPv6 enumeration.
 //
 // Example usage:
 //
