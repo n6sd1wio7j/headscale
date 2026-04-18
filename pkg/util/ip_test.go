@@ -102,17 +102,16 @@ func TestIsIPv6(t *testing.T) {
 	}
 }
 
-// TestContainsAddr verifies that ContainsAddr correctly identifies addresses within a prefix.
+// TestContainsAddr verifies that ContainsAddr correctly reports whether
+// a prefix contains a given address.
 func TestContainsAddr(t *testing.T) {
 	prefix := netip.MustParsePrefix("10.0.0.0/24")
 
-	// Address inside the prefix
 	inside := netip.MustParseAddr("10.0.0.42")
 	if !prefix.Contains(inside) {
 		t.Errorf("expected prefix %s to contain %s", prefix, inside)
 	}
 
-	// Address outside the prefix
 	outside := netip.MustParseAddr("10.0.1.1")
 	if prefix.Contains(outside) {
 		t.Errorf("expected prefix %s to not contain %s", prefix, outside)
